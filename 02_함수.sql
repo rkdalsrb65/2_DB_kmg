@@ -170,7 +170,86 @@ SELECT EMP_NAME,
 --------------------------------------------
 
 /* 형변환 함수 */
--- 문자열(CHAR) 숫자(NUMBER) 날짜(DATE) 끼리 형변환 가능
+-- 문자열(CHAR), 숫자(NUMBER), 날짜(DATE) 끼리 형변환 가능
+
+/* 문자열로 변환 */
+-- TO,CHAR(날짜,)
+
+-- <숫자 변환시 포맷 패턴>
+-- 9 : 숫자 한칸을 의미, 여러 개 작성 시 오른쪽 정렬
+-- 0 : 숫자 한칸을 의미, 여러 개 작성 시 오른쪽 정렬 + 빈칸 0 추가
+-- L : 현재 DB에 설정된 나라의 화폐 기호
+SELECT TO_CHAR(1234) FROM DUAL; -- 1,234 -> '1234'
+
+SELECT TO_CHAR(1234, '99999') FROM DUAL; -- ' 1234'
+SELECT TO_CHAR(1234, '00000') FROM DUAL; -- '01234'
+
+SELECT TO_CHAR(EXTRACT (MONTH FROM HIRE_DATE), '00') || '월'
+FROM EMPLOYEE;
+
+SELECT TO_CHAR(1000000) || '원' FROM DUAL; -- '1000000원'
+
+SELECT TO_CHAR(1000000, '9,999,999') || '원' FROM DUAL; -- '1,000,000원'
+
+SELECT TO_CHAR(1000000, 'L9,999,999') FROM DUAL; -- '1,000,000'
+
+SELECT TO_CHAR(1000000, '$9,999,999') FROM DUAL; -- '1,000,000'
+
+-- <날짜 변한 시 포맷 패턴>
+-- YYYY : 년도 / YY : 년도 (짧게)
+-- RRRR : 년도 / RR : 년도 (짧게)
+-- MM : 월 // DD : 일
+-- AM 또는 PM : 오전/오후 표시
+-- HH : 시간 / HH24 : 24시간 표기법
+-- MI : 분 / SS : 초
+-- DAY : 요일(전체) / DY : 요일(요일명만 표시)
+
+SELECT SYSDATE FROM DUAL; -- 2022-09-01 11:20:35.000
+
+-- 2022/09/01 11:20:35 목요일
+SELECT TO_CHAR(SYSDATE, 'YYYY/MM/DD HH24:MI:SS DAY') FROM DUAL;
+
+SELECT TO_CHAR(SYSDATE, 'MM/DD (DY)') FROM DUAL;
+
+-- 2022년 09월 01일 (목)
+SELECT TO_CHAR(SYSDATE, 'YYYY"년" MM"월" DD"일" (DY)') FROM DUAL;
+-- ORA-01821: 날짜 형식이 부적합합니다
+-- 년,월,일이 날짜를 나타내는 패턴으로 이닉이 안되서 오류 발생
+--> "" 쌍따옴표를 이용해서 단순한 문자로 인식시키면 해결됨
+
+
+/* 날짜로 변환 TO_DATE */
+-- TO_DATE(문자형 데이터,[포맷]) : 문자형 데이터를 날짜로 변경
+-- TO_DATE(숫자형 데이터,[포맷]) : 숫자형 데이터를 날짜로 변경
+--> 지정된 포맷으로 날짜를 인식함
+
+SELECT SYSDATE FROM DUAL;
+
+SELECT TO_DATE('2022-09-02') FROM DUAL;
+SELECT TO_DATE(20220902) FROM DUAL; 
+
+SELECT TO_DATE('220901 113255', 'YYMMDD HH24MISS') FROM DUAL;
+-- ORA-01861: 리터럴이 형식 문자열과 일치하지 않음
+--> 패턴을 적용해서 작성된 문자열의 각 문자가 어떤 날짜 형식인지 인지시킴
+
+-- EMPLOYEE 테이블에서 각 직원이 태어난 생년월일(1990년 05월 13일) 조회
+SELECT EMP_NAME,
+	TO_CHAR(TO_DATE(SUBSTR(EMP_NO, 1, INSTR(EMP_NO, '-') - 1) , 'RRMMDD'),
+	'YYYY"년" MM"월" DD"일"') AS 생년월일
+FROM EMPLOYEE;
+
+-- Y 패턴 : 현재 세기(21세기 == 20XX년 == 2000년대)
+-- R 패턴 : 1세기를 기준으로 절반(50년) 이상인 경우 이전 세기(1900년대)
+--  						 절반(50년) 미만인 경우 현재 세기(2000년대)
+
+SELECT TO_DATE('510505', 'YYMMDD') FROM DUAL; -- 2051-05-05 00:00:00.000
+SELECT TO_DATE('510505', 'RRMMDD') FROM DUAL; -- 1951-05-05 00:00:00.000
+
+
+
+
+
+
 
 
 
