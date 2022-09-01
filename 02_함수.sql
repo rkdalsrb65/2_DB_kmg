@@ -145,15 +145,32 @@ FROM EMPLOYEE;
 
 -- ADD_MONTHS(날짜 , 숫자) : 날짜에 숫자만큼의 개월 수를 더함. (음수도 가능)
 SELECT ADD_MONTHS(SYSDATE, 4) FROM DUAL;
-
 SELECT ADD_MONTHS(SYSDATE, -1) FROM DUAL;
 
+
 -- LAST_DAY(날짜) : 해당 달의 마지막 날짜를 구함.
+SELECT LAST_DAY(SYSDATE) FROM DUAL;
+
+SELECT LAST_DAY('2020-02-01') FROM DUAL;
+
+-- EXTRACT : 년, 월, 일 정보를 추출하여 리턴
+-- EXTRACT :(YEAR FROM 날짜) : 년도만 추출
+-- EXTRACT :(MONTH FROM 날짜) : 월만 추출
+-- EXTRACT :(DAY FROM 날짜) : 일만 추출
+
+-- EMPLOYEE 테이블에서
+-- 각 사원의 이름, 입사 년도, 월, 일 조회
+SELECT EMP_NAME,
+	EXTRACT(YEAR FROM HIRE_DATE) || '년' ||
+	EXTRACT(MONTH FROM HIRE_DATE) || '월' ||
+	EXTRACT(DAY FROM HIRE_DATE) || '일' AS 입사일
+	FROM EMPLOYEE;
 
 
+--------------------------------------------
 
-
-
+/* 형변환 함수 */
+-- 문자열(CHAR) 숫자(NUMBER) 날짜(DATE) 끼리 형변환 가능
 
 
 
