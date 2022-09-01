@@ -173,7 +173,8 @@ SELECT EMP_NAME,
 -- 문자열(CHAR), 숫자(NUMBER), 날짜(DATE) 끼리 형변환 가능
 
 /* 문자열로 변환 */
--- TO,CHAR(날짜,)
+-- TO,CHAR(날짜, [포맷]) : 날짜형 데이터를 문자형 데이터로 변경
+-- TO,CHAR(숫자, [포맷]) : 숫자형 데이터를 문자형 데이터로 변경
 
 -- <숫자 변환시 포맷 패턴>
 -- 9 : 숫자 한칸을 의미, 여러 개 작성 시 오른쪽 정렬
@@ -246,12 +247,129 @@ SELECT TO_DATE('510505', 'YYMMDD') FROM DUAL; -- 2051-05-05 00:00:00.000
 SELECT TO_DATE('510505', 'RRMMDD') FROM DUAL; -- 1951-05-05 00:00:00.000
 
 
+---------------------------------------------
+/* 숫자 형변환 */
+-- TO_NUMBER(문자데이터, [포맷]) : 문자형 데이터를 숫자 데이터로 변경
+
+SELECT '1,000,000' + 500000 FROM DUAL;
+-- ORA-01722: 수치가 부적합합니다
+-- 
+SELECT TO_NUMBER('1,000,000', '9,999,999') + 500000 FROM DUAL;
+
+---------------------------------------------
+
+/* NULL 처리 함수 */
+
+-- NVL(컬럼명, 컬럼값이 NULL일때 바꿀 값) : NULL인 컬럼값을 다른 값으로 변경
+
+/* NULL과 산술 연산을 진행하면 결과는 무조건 NULL */
+SELECT EMP_NAME, SALARY, NVL(BONUS, 0) , SALARY * NVL(BONUS, 0)
+FROM EMPLOYEE;
+
+-- NVL2(컬럼명,바꿀값1,바꿀값2)
+-- 해당 컬럼의 값이 있으면 바꿀값1로 변경,
+-- 해당 컬럼이 NULL이면 바꿀값2로 변경
+
+-- EMPLOYEE 테이블에서 보너스를 받으면 'O' , 안받으면 'X' 조회
+SELECT EMP_NAME, NVL2(BONUS, 'O' , 'X') "보너스 수령"
+FROM EMPLOYEE;
+
+/* 선택함수 */
+-- 여러 가지 경우에 따라 알맞은 결과를 선택할 수 있음.
+
+-- DECODE(계산식 | 컬럼명, 조건값1, 선택값1, 조건값2, 선택값2....., 아무것도 일치하지 않을 때)
+-- 비교하고자 하는 값 또는 칼럼이 조건식과 같으면 결과 값 반환
+-- 일치하는 값을 확인(자바의 SWITCH와 비슷함)
+
+-- 직원의 성별 구하기 (남:1 / 여:2)
+SELECT EMP_NAME, DECODE(SUBSTR(EMP_NO, 8, 1), '1', '남성', '2', '여성') 성별
+FROM EMPLOYEE;
+
+-- 직원의 급여를 인상하고자 한다.
+-- 직급 코드가 J7인 직원은 20% 인상,
+-- 직급 코드가 J6인 직원은 15% 인상,
+-- 직급 코드가 J5인 직원은 10% 인상,
+-- 그 외 직급은 5% 인상
+SELECT EMP_NAME, JOB_CODE, SALARY,
+	DECODE(JOB_CODE, 'J7', '20%', 'J6', '15%', 'J5', '10%', '5%') 인상률,
+	DECODE(JOB_CODE, 'J7', SALARY * 1.2, 'J6', SALARY * 1.15, 'J5', SALARY * 1.1, SALARY * 1.05) "인상된 급여"
+FROM EMPLOYEE;
 
 
 
+-- CASE WHEN 조건식 THEN 결과값
+--      WHEN 조건식 THEN 결과값
+--      ELSE 결과값
+-- END
+
+-- 비교하고자 하는 값 또는 컬럼이 조건식과 같으면 결과 값 반환
+-- 조건은 범위 값 가능
+
+-- EMPLOYEE 테이블에서
+-- 급여가 500만원 이상이면 '대'
+-- 급여가 300만 이상 500만 미만이면 '중'
+-- 급여가 300만 미만 '소' 조회
+
+SELECT EMP_ID, SALARY,
+	CASE
+		WHEN SALARY >= 5000000 THEN '대' -- if
+		WHEN SALARY >= 3000000 AND SALARY < 5000000 THEN '중' -- else if
+		ELSE '소' 
+		END "급여 받는 정도"
+FROM EMPLOYEE;
+
+/* 그룹 함수 */
+-- 하나 이상의 행을 그룹으로 묶어 연산하여 총합,평균 등의 하나의 결과 행으로 반환하는 함수
+
+-- SUM(숫자가 기록된 컬럼명) : 합계
+-- 모든 직원의 급여 합
+SELECT SUM(SALARY) FROM EMPLOYEE; -- 70,096,240
+
+
+-- AVG(숫자가 기록된 컬럼명) : 평균
+-- 전 직원 급여 평균
+SELECT ROUND(AVG(SALARY)) FROM EMPLOYEE; -- 3,047,663
+
+-- 부서 코드가 'D9'인 사원들의 급여 합, 평균
+/*3*/SELECT SUM(SALARY) 합계, ROUND(AVG(SALARY)) 평균
+/*1*/FROM EMPLOYEE
+/*2*/WHERE DEPT_CODE = 'D9';
 
 
 
+-- MIN(컬럼명) : 최소값
+-- MAX(컬럼명) : 최대값
+--> 타입 제한 없음 (숫자 : 대/소, 날짜 : 과거/미래, 문자열 : 문자 순서)
+
+-- 급여 최소값, 가장 빠른 입사일, 이메일 알파벳 순서가 가장 빠른 이메일
+SELECT MIN(SALARY), MIN(HIRE_DATE), MIN(EMAIL)
+FROM EMPLOYEE;
+
+-- 급여 최대값, 가장 늦은 입사일, 이메일 알파벳 순서가 가장 느린 이메일
+SELECT MAX(SALARY), MAX(HIRE_DATE), MAX(EMAIL)
+FROM EMPLOYEE;
+
+-- EMPLOYEE 테이블에서 급여를 가장 많이 받는 사원의
+-- 이름, 급여, 직급 코드 조회
+SELECT EMP_NAME, SALARY, JOB_CODE
+FROM EMPLOYEE
+WHERE SALARY = (SELECT MAX(SALARY) FROM EMPLOYEE);
+				-- 서브쿼리 + 그룹 함수
+
+
+
+-- * COUNT(* | 컬럼명) : 행 개수를 헤아려서 리턴
+-- COUNT([DISTINCT] 컬럼명) : 중복을 제거한 행 개수를 헤아려서 리턴
+-- COUNT(*) : NULL을 포함한 전체 행 개수를 리턴
+-- COUNT(컬럼명) : NULL을 제외한 실제 값이 기록된 행 개수를 리턴함
+
+SELECT COUNT(*) FROM EMPLOYEE; -- EMPLOYEE 테이블의 행의 개수
+
+-- BONUS를 받는 사원의 수
+SELECT COUNT(*) FROM EMPLOYEE
+WHERE BONUS IS NOT NULL; -- 9명
+
+SELECT COUNT(BONUS) FROM EMPLOYEE; -- 9명
 
 
 
