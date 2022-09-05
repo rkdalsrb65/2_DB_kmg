@@ -4,7 +4,7 @@
 		"oracle_thin-182fd11f73d-fd2b9b665c9aac6": {
 			"provider": "oracle",
 			"driver": "oracle_thin",
-			"name": "115.90.212.22",
+			"name": "WORKBOOK 계정",
 			"save-password": true,
 			"read-only": false,
 			"configuration": {
@@ -12,6 +12,37 @@
 				"port": "9000",
 				"database": "XE",
 				"url": "jdbc:oracle:thin:@//115.90.212.22:9000/XE",
+				"configurationType": "MANUAL",
+				"home": "C:\\app\\user1\\product\\21c\\dbhomeXE",
+				"type": "dev",
+				"provider-properties": {
+					"show-only-one-schema@": "false",
+					"@dbeaver-check-schema-content@": "false",
+					"@dbeaver-always-show-dba@": "false",
+					"@dbeaver-always-use-dba-views@": "false",
+					"@dbeaver-meta-use-sys-schema@": "false",
+					"@dbeaver-meta-use-simple-constraints@": "false",
+					"@dbeaver-use-rule-hint@": "false",
+					"@dbeaver-use-meta-optimizer@": "true",
+					"@dbeaver-meta-use-alternative-table-query@": "false",
+					"oracle.meta-search-in-synonyms": "false",
+					"@dbeaver-connection-type@": "BASIC",
+					"@dbeaver-sid-service@": "SERVICE"
+				},
+				"auth-model": "oracle_native"
+			}
+		},
+		"oracle_thin-1830b5da6f4-6fe8620179eaa375": {
+			"provider": "oracle",
+			"driver": "oracle_thin",
+			"name": "localhost",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "1521",
+				"database": "XE",
+				"url": "jdbc:oracle:thin:@//localhost:1521/XE",
 				"configurationType": "MANUAL",
 				"home": "C:\\app\\user1\\product\\21c\\dbhomeXE",
 				"type": "dev",
@@ -39,7 +70,7 @@
 			"name": "Development",
 			"color": "255,255,255",
 			"description": "Regular development database",
-			"auto-commit": false,
+			"auto-commit": true,
 			"confirm-execute": false,
 			"confirm-data-change": false,
 			"auto-close-transactions": false
