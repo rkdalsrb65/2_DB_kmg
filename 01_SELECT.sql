@@ -90,9 +90,9 @@ SELECT DISTINCT DEPT_CODE, JOB_CODE FROM EMPLOYEE;
 
 -------------------------------
 
---3.  SELECT절 : SELECT 컬럼명 
---1. FROM절 : FROM 테이블명;
---2. WHERE절 : WHERE 컬럼명 연산자 값;
+--3. SELECT절 : SELECT 컬럼명 
+--1. FROM절   : FROM 테이블명;
+--2. WHERE절  : WHERE 컬럼명 연산자 값;
 -- (조건절)
 
 -- EMPLOYEE 테이블에서 급여가 3백만원 초과인 사원의
