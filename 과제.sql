@@ -237,6 +237,10 @@ ORDER BY STUDENT_NAME;
 
 --7. 춘 기술대학교의 과목 이름과 과목의 학과 이름을 출력하는 SQL 문장을 작성하시오.
 
+SELECT CLASS_NAME, DEPARTMENT_NAME
+FROM TB_CLASS
+NATURAL JOIN TB_DEPARTMENT;
+
 --8. 과목별 교수 이름을 찾으려고 한다. 과목 이름과 교수 이름을 출력하는 SQL 문을 작성하시오.
 
 --9. 8번의 결과 중 '인문사회' 계열에 속한 과목의 교수 이름을 찾으려고 한다.
