@@ -223,6 +223,11 @@ ORDER BY PROFESSOR_SSN;
 --5. 2004년 2학기에 'C3118100' 과목을 수강한 학생들의 학점을 조회하려고 한다. 학점이 높은 학생부터
 --   표시하고, 학점이 같으면 학번이 낮은 학생부터 표시하는 구문을 작성해보시오.
 
+SELECT STUDENT_NO, POINT
+FROM TB_GRADE
+WHERE TERM_NO = '200402' AND CLASS_NO = 'C3118100'
+ORDER BY POINT DESC;
+
 --6. 학생 번호, 학생 이름, 학과 이름을 학생 이름으로 오름차순 정렬하여 출력하는 SQL문을 작성하시오.
 
 --7. 춘 기술대학교의 과목 이름과 과목의 학과 이름을 출력하는 SQL 문장을 작성하시오.
