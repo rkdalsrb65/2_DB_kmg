@@ -215,6 +215,11 @@ ORDER BY STUDENT_NAME;
 --4. 현재 법학과 교수 중 가장 나이가 많은 사람부터 이름을 확인할 수 있는 SQL 문장을 작성하시오.
 --   (법학과의 '학과코드'는 학과 테이블(TB_DEPARTMENT)을 조회해서 찾아내도록 하자)
 
+SELECT PROFESSOR_NAME, PROFESSOR_SSN
+FROM TB_PROFESSOR
+WHERE DEPARTMENT_NO = '005'
+ORDER BY PROFESSOR_SSN;
+
 --5. 2004년 2학기에 'C3118100' 과목을 수강한 학생들의 학점을 조회하려고 한다. 학점이 높은 학생부터
 --   표시하고, 학점이 같으면 학번이 낮은 학생부터 표시하는 구문을 작성해보시오.
 
