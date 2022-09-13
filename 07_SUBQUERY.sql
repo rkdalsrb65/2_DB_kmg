@@ -352,18 +352,38 @@ WHERE ENT_YN = 'Y' AND SUBSTR(EMP_NO, 8, 1) = '2');
 -------------------------- 연습문제 -------------------------------
 -- 1. 노옹철 사원과 같은 부서, 같은 직급인 사원을 조회하시오. (단, 노옹철 사원은 제외)
 --    사번, 이름, 부서코드, 직급코드, 부서명, 직급명
+SELECT EMP_ID, EMP_NAME, DEPT_CODE, JOB_CODE, DEPT_TITLE, JOB_NAME
+FROM EMPLOYEE
+JOIN JOB USING(JOB_CODE)
+LEFT JOIN DEPARTMENT ON (DEPT_CODE = DEPT_ID)
+WHERE EMP_NAME = '노옹철';
 
+SELECT EMP_ID, EMP_NAME, DEPT_CODE, JOB_CODE, DEPT_TITLE, JOB_NAME
+FROM EMPLOYEE
+JOIN JOB USING(JOB_CODE)
+LEFT JOIN DEPARTMENT ON (DEPT_CODE = DEPT_ID)
+WHERE (DEPT_CODE, JOB_CODE) = (SELECT DEPT_CODE, JOB_CODE
+FROM EMPLOYEE
+WHERE EMP_NAME = '노옹철')
+AND EMP_NAME != '노옹철'; -- 노옹철이 아닌 사람 조회
 
 
 -- 2. 2000년도에 입사한 사원의 부서와 직급이 같은 사원을 조회하시오
 --    사번, 이름, 부서코드, 직급코드, 고용일
-
+SELECT EMP_ID, EMP_NAME, DEPT_CODE, JOB_CODE, HIRE_DATE
+FROM EMPLOYEE
+WHERE (DEPT_CODE, JOB_CODE) = (SELECT DEPT_CODE, JOB_CODE
+FROM EMPLOYEE
+WHERE EXTRACT(YEAR FROM HIRE_DATE) = 2000);
 
 
 -- 3. 77년생 여자 사원과 동일한 부서이면서 동일한 사수를 가지고 있는 사원을 조회하시오
 --    사번, 이름, 부서코드, 사수번호, 주민번호, 고용일     
-                  
-
+SELECT EMP_ID, EMP_NAME, DEPT_CODE, MANAGER_ID, EMP_NO, HIRE_DATE 
+FROM EMPLOYEE
+WHERE (DEPT_CODE, MANAGER_ID) = (SELECT DEPT_CODE, MANAGER_ID
+FROM EMPLOYEE 
+WHERE SUBSTR(EMP_NO, 1, 2) = '77' AND SUBSTR(EMP_NO, 8, 1) = '2');
 
 
 ----------------------------------------------------------------------
@@ -376,15 +396,21 @@ WHERE ENT_YN = 'Y' AND SUBSTR(EMP_NO, 8, 1) = '2');
 -- 단, 급여와 급여 평균은 만원단위로 계산하세요 TRUNC(컬럼명, -4)    
 
 -- 1) 급여를 200, 600만 받는 직원 (200만, 600만이 평균급여라 생각 할 경우)
-
+SELECT EMP_ID, EMP_NAME, JOB_CODE, SALARY
+FROM EMPLOYEE
+WHERE SALARY IN (2000000, 6000000);
 
 -- 2) 직급별 평균 급여
-
+SELECT JOB_CODE, TRUNC(AVG(SALARY), -4)
+FROM EMPLOYEE
+GROUP BY JOB_CODE;
 
 -- 3) 본인 직급의 평균 급여를 받고 있는 직원
-
-                  
-                
+SELECT EMP_ID, EMP_NAME, JOB_CODE, SALARY
+FROM EMPLOYEE
+WHERE (JOB_CODE, SALARY) IN (SELECT JOB_CODE, TRUNC(AVG(SALARY), -4)
+FROM EMPLOYEE
+GROUP BY JOB_CODE);
 
 -------------------------------------------------------------------------------
 
@@ -394,6 +420,12 @@ WHERE ENT_YN = 'Y' AND SUBSTR(EMP_NO, 8, 1) = '2');
 
 -- 상관쿼리는 먼저 메인쿼리 한 행을 조회하고
 -- 해당 행이 서브쿼리의 조건을 충족하는지 확인하여 SELECT를 진행함
+-- ** 해석 순서가 기존 서브쿼리와 다르게
+-- ** 메인쿼리 1행 -> 1행에 대한 서브쿼리
+-- ** 메인쿼리 2행 -> 2행에 대한 서브쿼리
+-- ** 메인쿼리 3행 -> 3행에 대한 서브쿼리
+-- ** ...
+-- ** 메인쿼리의 행의 수 만큼 서브쿼리가 생성되어 진행됨
 
 
 -- 사수가 있는 직원의 사번, 이름, 부서명, 사수사번 조회
@@ -403,13 +435,30 @@ WHERE ENT_YN = 'Y' AND SUBSTR(EMP_NO, 8, 1) = '2');
 -- 직급별 급여 평균보다 급여를 많이 받는 직원의 
 -- 이름, 직급코드, 급여 조회
 
+-- 메인 쿼리
+SELECT EMP_NAME, JOB_CODE, SALARY
+FROM EMPLOYEE MAIN
+WHERE SALARY > (SELECT AVG(SALARY)
+FROM EMPLOYEE SUB
+WHERE SUB.JOB_CODE = MAIN.JOB_CODE);
 
+-- 서브 쿼리
+SELECT JOB_CODE, AVG(SALARY)
+FROM EMPLOYEE
+GROUP BY JOB_CODE;
 
 -- 부서별 입사일이 가장 빠른 사원의
 --    사번, 이름, 부서명(NULL이면 '소속없음'), 직급명, 입사일을 조회하고
 --    입사일이 빠른 순으로 조회하세요
 --    단, 퇴사한 직원은 제외하고 조회하세요
-
+SELECT EMP_ID, EMP_NAME, NVL(DEPT_TITLE, '소속없음'), JOB_NAME, HIRE_DATE
+FROM EMPLOYEE MAIN
+JOIN JOB USING(JOB_CODE)
+LEFT JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID)
+WHERE ENT_YN = 'N' AND HIRE_DATE = (SELECT MIN(HIRE_DATE)
+FROM EMPLOYEE SUB
+WHERE SUB.DEPT_CODE = MAIN.DEPT_CODE)
+ORDER BY HIRE_DATE;
 
 
 ----------------------------------------------------------------------------------
