@@ -230,6 +230,11 @@ ORDER BY POINT DESC;
 
 --6. 학생 번호, 학생 이름, 학과 이름을 학생 이름으로 오름차순 정렬하여 출력하는 SQL문을 작성하시오.
 
+SELECT STUDENT_NO, STUDENT_NAME, DEPARTMENT_NAME
+FROM TB_STUDENT
+NATURAL JOIN TB_DEPARTMENT
+ORDER BY STUDENT_NAME;
+
 --7. 춘 기술대학교의 과목 이름과 과목의 학과 이름을 출력하는 SQL 문장을 작성하시오.
 
 --8. 과목별 교수 이름을 찾으려고 한다. 과목 이름과 교수 이름을 출력하는 SQL 문을 작성하시오.
