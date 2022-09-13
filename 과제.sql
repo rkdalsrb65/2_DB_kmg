@@ -207,6 +207,11 @@ ORDER BY STUDENT_SSN DESC;
 --   이름의 오름차순으로 화면에 출력하시오. 단, 출력헤더에는 "학생이름", "학번", "거주지 주소"가
 --   출력되도록 한다.
 
+SELECT STUDENT_NAME 학생이름, STUDENT_NO 학번, STUDENT_ADDRESS "거주지 주소"
+FROM TB_STUDENT
+WHERE STUDENT_NO LIKE '9______' AND STUDENT_ADDRESS LIKE '경기도%'
+ORDER BY STUDENT_NAME;
+
 --4. 현재 법학과 교수 중 가장 나이가 많은 사람부터 이름을 확인할 수 있는 SQL 문장을 작성하시오.
 --   (법학과의 '학과코드'는 학과 테이블(TB_DEPARTMENT)을 조회해서 찾아내도록 하자)
 
