@@ -30,6 +30,9 @@
 					"@dbeaver-sid-service@": "SERVICE"
 				},
 				"auth-model": "oracle_native"
+			},
+			"custom-properties": {
+				"resultset.maxrows": "1000"
 			}
 		},
 		"oracle_thin-1830b5da6f4-6fe8620179eaa375": {
