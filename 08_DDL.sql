@@ -71,7 +71,7 @@ CREATE TABLE "MEMBER"(
 MEMBER_ID VARCHAR2(20),
 MEMBER_PWD VARCHAR2(20),
 MEMBER_NAME VARCHAR2(30),
-MEMBER_SSN CHAR2(14),
+MEMBER_SSN CHAR(14),
 ENROLL_DATE DATE DEFAULT SYSDATE
 );
 
@@ -86,7 +86,11 @@ SELECT * FROM "MEMBER";
 -- 2. 컬럼에 주석 달기
 -- [표현식]
 -- COMMENT ON COLUMN 테이블명.컬럼명 IS '주석내용';
-
+COMMENT ON COLUMN "MEMBER".MEMBER_ID IS '회원 아이디';
+COMMENT ON COLUMN "MEMBER".MEMBER_PWD IS '회원 비밀번호';
+COMMENT ON COLUMN "MEMBER".MEMBER_NAME IS '회원 이름';
+COMMENT ON COLUMN "MEMBER".MEMBER_SSN IS '회원 주민 등록 번호';
+COMMENT ON COLUMN "MEMBER".ENROLL_DATE IS '회원 가입일';
 
 
 
@@ -94,31 +98,57 @@ SELECT * FROM "MEMBER";
 -- 데이터 딕셔너리에 정의되어 있음
 SELECT * FROM USER_TABLES;
 
--- DESC문 : 테이블의 구조를 표시
-DESC MEMBER;
-
-
 -- MEMBER 테이블에 샘플 데이터 삽입
+--INSERT INTO 테이블명 VALUES(값1, 값2, ...);
+INSERT INTO "MEMBER" VALUES('MEM01', '123ABC', '홍길동', '991213-1234567', DEFAULT);
 
-
+-- * INSERT/UPDATE 시 컬럼 값으로 DEFAULT를 작성하면 테이블 생성 시
+--   해당 컬럼에 지정된 DEFAULT 값으로 삽입이 된다
 
 --  데이터  삽입 확인
-
+SELECT * FROM "MEMBER";
+COMMIT;
 
 
 -- 추가 샘플 데이터 삽입
 -- 가입일 -> SYSDATE를 활용
-
+INSERT INTO "MEMBER" VALUES('MEM02', 'QWER1234', '김영희', '970506-2233445', SYSDATE);
 
 -- 가입일 -> DEFAULT 활용(테이블 생성 시 정의된 값이 반영됨)
-
+INSERT INTO "MEMBER" VALUES('MEM03', 'ASDF9876', '박철수', '940416-1987654', DEFAULT);
 
 -- 가입일 -> INSERT 시 미작성 하는 경우 -> DEAFULT 값이 반영됨
+--INSERT INTO 테이블명(컬럼명1, 컬럼명2, 컬럼명3)
+--VALUES(값1, 값2, 값3);
+INSERT INTO "MEMBER"(MEMBER_ID, MEMBER_PWD, MEMBER_NAME)
+VALUES('MEM04', '1Q2W3E4R', '이지연');
+
+-- ** JDBC에서 날짜를 입력 받았을 때 삽입하는 방법 **
+INSERT INTO "MEMBER" VALUES('MEM05', 'PASS05', '김길동', '930303-1333333',
+TO_DATE('2022-09-13 17:33:27', 'YYYY-MM-DD HH24:MI:SS'));
+-- ?(PLACE HOLDER)
 
 
 --  데이터  삽입 확인
+SELECT * FROM "MEMBER";
+COMMIT;
 
+-- ** NUMBER 타입의 문제점 **
+-- MEMBER2 테이블(아이디, 비밀번호, 이름, 전화번호)
+CREATE TABLE MEMBER2(MEMBER_ID VARCHAR2(20), 
+MEMBER_PWD VARCHAR2(20), 
+MEMBER_NAME VARCHAR2(30), 
+MEMBER_TELL NUMBER
+);
 
+INSERT INTO MEMBER2 VALUES('MEM01', 'PASS01', '고길동', 7712341234);
+INSERT INTO MEMBER2 VALUES('MEM02', 'PASS02', '고길순', 01045678901);
+--> NUMBER 타입 컬럼에 데이터 삽입 시
+--  제일 앞에 0이 있으면 이를 자동으로 제거함
+--> 전화번호, 주민등록번호 처럼 숫자로만 되어있는 데이터지만
+--  0으로 시작할 가능성이 있으면 CHAR, VARCHAR2 같은 문자형을 사용
+
+SELECT * FROM MEMBER2;
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -152,10 +182,11 @@ SELECT * FROM USER_CONS_COLUMNS;
 -- 해당 컬럼에 반드시 값이 기록되어야 하는 경우 사용
 -- 삽입/수정시 NULL값을 허용하지 않도록 컬럼레벨에서 제한
 
+-- * 컬럼 레벨 : 테이블 생성 시 컬럼을 정의하는 부분에 작성하는 것
 
 CREATE TABLE USER_USED_NN(
-    USER_NO , 
-    
+    USER_NO NUMBER NOT NULL, -- 사용자 번호 (모든 사용자는 사용자 번호가 있어야 한다)
+                             --> 컬럼 레벨 제약 조건 설정
     USER_ID VARCHAR2(20) ,
     USER_PWD VARCHAR2(30) ,
     USER_NAME VARCHAR2(30) ,
@@ -172,7 +203,7 @@ INSERT INTO USER_USED_NN
 VALUES(NULL, NULL, NULL, NULL, NULL, '010-1234-5678', 'hong123@kh.or.kr');
 --> NOT NULL 제약 조건에 위배되어 오류 발생 
 -- ORA-01400: cannot insert NULL into ("KH"."USER_USED_NN"."USER_NO")
-
+-- ORA-01400: NULL을 ("KH_KMG"."USER_USED_NN"."USER_NO") 안에 삽입할 수 없습니다
 --------------------------------------------------------------------------------------------------------------------
 
 
@@ -181,20 +212,29 @@ VALUES(NULL, NULL, NULL, NULL, NULL, '010-1234-5678', 'hong123@kh.or.kr');
 -- 컬럼레벨에서 설정 가능, 테이블 레벨에서 설정 가능
 -- 단, UNIQUE 제약 조건이 설정된 컬럼에 NULL 값은 중복 삽입 가능.
 
+-- * 테이블 레벨 : 테이블 생성 시 컬럼 정의가 끝난 후 마지막에 작성
 
+-- * 제약조건 지정 방법
+-- 1) 컬럼 레벨 : [CONSTRAINT 제약조건명] 제약조건
+-- 2) 테이블 레벨 : [CONSTRAINT 제약조건명] 제약조건(컬럼명)
 -- UNIQUE 제약 조건 테이블 생성
 CREATE TABLE USER_USED_UK(
     USER_NO NUMBER,
-    USER_ID VARCHAR2(20) , 
-    
-    USER_PWD VARCHAR2(30) ,
+--    USER_ID VARCHAR2(20) UNIQUE, -- 컬럼 레벨 (제약조건명 미지정)   
+--    USER_ID VARCHAR2(20) CONSTRAINT USER_ID_U UNIQUE,
+						-- 컬럼 레벨(제약조건명 지정)
+    USER_ID VARCHAR2(20),
+    USER_PWD VARCHAR2(30),
     USER_NAME VARCHAR2(30),
     GENDER VARCHAR2(10),
     PHONE VARCHAR2(30),
-    EMAIL VARCHAR2(50)
-
+    EMAIL VARCHAR2(50),
+    /*테이블 레벨*/
+--    UNIQUE(USER_ID) -- 테이블 레벨(제약조건 미지정)
+    CONSTRAINT USER_ID_U UNIQUE(USER_ID) -- 테이블 레벨(제약조건 지정)
 );
 
+DROP TABLE USER_USED_UK; -- 테이블 삭제
 
 INSERT INTO USER_USED_UK
 VALUES(1, 'user01', 'pass01', '홍길동', '남', '010-1234-5678', 'hong123@kh.or.kr');
@@ -219,7 +259,7 @@ SELECT  * FROM USER_USED_UK;
 SELECT UCC.TABLE_NAME, UCC.COLUMN_NAME, UC.CONSTRAINT_TYPE
 FROM USER_CONSTRAINTS UC, USER_CONS_COLUMNS UCC
 WHERE UCC.CONSTRAINT_NAME = UC.CONSTRAINT_NAME
-AND UCC.CONSTRAINT_NAME = '제약조건명';
+AND UCC.CONSTRAINT_NAME = 'USER_ID_U';
 
 
 ---------------------------------------
@@ -227,6 +267,10 @@ AND UCC.CONSTRAINT_NAME = '제약조건명';
 
 -- UNIQUE 복합키
 -- 두 개 이상의 컬럼을 묶어서 하나의 UNIQUE 제약조건을 설정함
+
+-- * 복합키 지정은 테이블 레벨만 가능하다! *
+-- * 복합키는 지정된 모든 컬럼의 값이 같을 때 위배된다! *
+
 CREATE TABLE USER_USED_UK2(
     USER_NO NUMBER,
     USER_ID VARCHAR2(20),
@@ -234,8 +278,9 @@ CREATE TABLE USER_USED_UK2(
     USER_NAME VARCHAR2(30),
     GENDER VARCHAR2(10),
     PHONE VARCHAR2(30),
-    EMAIL VARCHAR2(50)
-  
+    EMAIL VARCHAR2(50),
+    -- 테이블 레벨 UNIQUE 복합키 지정
+    CONSTRAINT USER_ID_NAME_U UNIQUE(USER_ID, USER_NAME)
 );
 
 
@@ -243,17 +288,15 @@ INSERT INTO USER_USED_UK2
 VALUES(1, 'user01', 'pass01', '홍길동', '남', '010-1234-5678', 'hong123@kh.or.kr');
 
 INSERT INTO USER_USED_UK2
-VALUES(2, 'user01', 'pass01', '홍길동', '남', '010-1234-5678', 'hong123@kh.or.kr');
---> USER_NO가 다름
-
-INSERT INTO USER_USED_UK2
 VALUES(2, 'user02', 'pass01', '홍길동', '남', '010-1234-5678', 'hong123@kh.or.kr');
---> USER_ID가 다름
 
 INSERT INTO USER_USED_UK2
-VALUES(1, 'user01', 'pass01', '홍길동', '남', '010-1234-5678', 'hong123@kh.or.kr');
---> 여러 컬럼을 묶어서 UNIQUE 제약 조건이 설정되어 있으면 
--- 두 컬럼이 모두 중복되는 값일 경우에만 오류 발생
+VALUES(3, 'user01', 'pass01', '고길동', '남', '010-1234-5678', 'hong123@kh.or.kr');
+
+INSERT INTO USER_USED_UK2
+VALUES(4, 'user01', 'pass01', '홍길동', '남', '010-1234-5678', 'hong123@kh.or.kr');
+
+-- ORA-00001: 무결성 제약 조건(KH_KMG.USER_ID_NAME_U)에 위배됩니다
 
 SELECT * FROM USER_USED_UK2;
 
@@ -263,23 +306,26 @@ SELECT * FROM USER_USED_UK2;
 -- 3. PRIMARY KEY(기본키) 제약조건 
 
 -- 테이블에서 한 행의 정보를 찾기위해 사용할 컬럼을 의미함
--- 테이블에 대한 식별자(IDENTIFIER) 역할을 함
--- NOT NULL + UNIQUE 제약조건의 의미
+-- 테이블에 대한 식별자(IDENTIFIER, 학번 등을 의미) 역할을 함
+
+-- NOT NULL + UNIQUE 제약조건의 의미 -> 중복되지 않는 값이 필수로 존재해야 함
+
 -- 한 테이블당 한 개만 설정할 수 있음
 -- 컬럼레벨, 테이블레벨 둘다 설정 가능함
 -- 한 개 컬럼에 설정할 수도 있고, 여러개의 컬럼을 묶어서 설정할 수 있음
 
 
 CREATE TABLE USER_USED_PK(
-    USER_NO NUMBER ,
-    
+    USER_NO NUMBER CONSTRAINT USER_NO_PK PRIMARY KEY, -- 컬럼 레벨
+    				-- 제약조건명 지정
     USER_ID VARCHAR2(20) UNIQUE,
     USER_PWD VARCHAR2(30) NOT NULL,
     USER_NAME VARCHAR2(30),
     GENDER VARCHAR2(10),
     PHONE VARCHAR2(30),
     EMAIL VARCHAR2(50)
-
+    -- 테이블 레벨
+--	,CONSTRAINT USER_NO_PK PRIMARY KEY(USER_NO)
 );
 
 INSERT INTO USER_USED_PK
@@ -288,11 +334,12 @@ VALUES(1, 'user01', 'pass01', '홍길동', '남', '010-1234-5678', 'hong123@kh.o
 INSERT INTO USER_USED_PK
 VALUES(1, 'user02', 'pass02', '이순신', '남', '010-5678-9012', 'lee123@kh.or.kr');
 --> 기본키 중복으로 오류
+-- ORA-00001: 무결성 제약 조건(KH_KMG.USER_NO_PK)에 위배됩니다
 
 INSERT INTO USER_USED_PK
 VALUES(NULL, 'user03', 'pass03', '유관순', '여', '010-9999-3131', 'yoo123@kh.or.kr');
 --> 기본키가 NULL 이므로 오류
-
+--  ORA-01400: NULL을 ("KH_KMG"."USER_USED_PK"."USER_NO") 안에 삽입할 수 없습니다
 
 ---------------------------------------
 
@@ -320,12 +367,14 @@ VALUES(2, 'user01', 'pass01', '유관순', '여', '010-9999-3131', 'yoo123@kh.or
 INSERT INTO USER_USED_PK2
 VALUES(1, 'user01', 'pass01', '신사임당', '여', '010-9999-9999', 'sin123@kh.or.kr');
 -- 회원 번호와 아이디 둘다 중복 되었을 때만 제약조건 위배 에러 발생
+-- ORA-00001: 무결성 제약 조건(KH_KMG.PK_USERNO_USERID)에 위배됩니다
 
 SELECT * FROM USER_USED_PK2;
 
 -- PRIMARY KEY는 NULL이 들어갈 수 없음
 INSERT INTO USER_USED_PK2
 VALUES(NULL, 'user01', 'pass01', '신사임당', '여', '010-9999-9999', 'sin123@kh.or.kr');
+-- ORA-01400: NULL을 ("KH_KMG"."USER_USED_PK2"."USER_NO") 안에 삽입할 수 없습니다
 
 ----------------------------------------------------------------------------------------------------------------
 
@@ -334,7 +383,7 @@ VALUES(NULL, 'user01', 'pass01', '신사임당', '여', '010-9999-9999', 'sin123
 
 -- 참조(REFERENCES)된 다른 테이블의 컬럼이 제공하는 값만 사용할 수 있음
 -- FOREIGN KEY제약조건에 의해서 테이블간의 관계(RELATIONSHIP)가 형성됨
--- 제공되는 값 외에는 NULL을 사용할 수 있음
+-- 제공되는 값 외에는 NULL(참조하는 값이 없음)을 사용할 수 있음
 
 -- 컬럼레벨일 경우
 -- 컬럼명 자료형(크기) [CONSTRAINT 이름] REFERENCES 참조할 테이블명 [(참조할컬럼)] [삭제룰]
@@ -364,10 +413,14 @@ CREATE TABLE USER_USED_FK(
   GENDER VARCHAR2(10),
   PHONE VARCHAR2(30),
   EMAIL VARCHAR2(50),
-  GRADE_CODE NUMBER
-  
+  GRADE_CODE NUMBER CONSTRAINT GRADE_CODE_FK REFERENCES USER_GRADE/*(GRADE_CODE)*/ -- 컬럼 레벨
+  					-- 컬럼명 미작성 시 USER_GRADE 테이블의 PK를 자동 참조
+  -- 테이블 레벨
+--  , CONSTRAINT GRADE_CODE_PK FOREIGN KEY(GRADE_CODE) REFERENCES USER_GRADE
+  							--> FOREIGN KEY라는 단어는 테이블 레벨에서만 사용!
 );
 
+COMMIT;
 
 INSERT INTO USER_USED_FK
 VALUES(1, 'user01', 'pass01', '홍길동', '남', '010-1234-5678', 'hong123@kh.or.kr', 10);
