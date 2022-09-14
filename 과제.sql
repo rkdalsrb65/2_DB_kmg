@@ -281,12 +281,32 @@ WHERE A.STUDENT_NO = 'A313047'
 
 --12. 2007년도에 '인간관계론' 과목을 수강한 하갱을 찾아 학생이름과 수강학기를 표시하는 SQL 문장을 작성하시오.
 
+SELECT A.STUDENT_NAME, B.TERM_NO
+FROM TB_STUDENT A
+JOIN TB_GRADE B ON (B.STUDENT_NO = A.STUDENT_NO)
+JOIN TB_CLASS C ON (C.CLASS_NO = B.CLASS_NO)
+WHERE B.TERM_NO LIKE '2007__'
+AND C.CLASS_NAME = '인간관계론';
+
 --13. 예체능 계열 과목 중 과목 담당교수를 한 명도 배정받지 못한 과목을 찾아
 --    그 과목 이름과 학과 이름을 출력하는 SQL 문장을 작성하시오.
+
+SELECT A.CLASS_NAME, B.DEPARTMENT_NAME
+FROM TB_CLASS A
+JOIN TB_DEPARTMENT B ON (B.DEPARTMENT_NO = A.DEPARTMENT_NO)
+LEFT JOIN TB_CLASS_PROFESSOR C ON (C.CLASS_NO = A.CLASS_NO)
+WHERE CATEGORY = '예체능' AND C.PROFESSOR_NO IS NULL;
 
 --14. 춘 기술대학교 서반아어학과 학생들의 지도교수를 게시하고자 한다. 학생이름과 지도교수 이름을 찾고 만일
 --    지도 교수가 없는 학생일 경우 "지도교수 미지정"으로 표시하도록 하는 SQL 문을 작성하시오.
 --    단, 출력헤더는 "학생이름", "지도교수"로 표시하며 고학번 학생이 먼저 표시되도록 한다.
+
+SELECT STUDENT_NAME 학생이름, NVL(PROFESSOR_NAME, '지도교수 미지정') 지도교수
+FROM TB_STUDENT A
+LEFT JOIN TB_PROFESSOR B ON (B.PROFESSOR_NO = A.COACH_PROFESSOR_NO)
+JOIN TB_DEPARTMENT C ON (C.DEPARTMENT_NO = A.DEPARTMENT_NO)
+WHERE C.DEPARTMENT_NAME = '서반아어학과'
+ORDER BY STUDENT_NO;
 
 --15. 휴학생이 아닌 학생 중 평점이 4.0 이상인 학생을 찾아
 --    그 학생의 학번, 이름, 학과 이름, 평점을 출력하는 SQL 문을 작성하시오.
