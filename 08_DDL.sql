@@ -8,7 +8,14 @@
 - User_tables : 자신의 계정이 소유한 객체 등에 관한 정보를 조회 할 수 있는 딕셔너리 뷰
 
 */
+
+SELECT * FROM USER_TABLES;
+
 --------------------------------------------------------------------------------------------------------------------
+
+-- DQL(Data Query Language) : 데이터 질의(조회) 언어
+-- DML(Data Manipulation Language) : 데이터 조작 언어, 테이블에 데이터를 삽입, 수정, 삭제하는 언어
+-- TCL(Transaction Control Language) : 트랜잭션 제어 언어 DML 수행 내용을 COMMIT, ROLLBACK 하는 언어
 
 -- DDL(DATA DEFINITION LANGUAGE) : 데이터 정의 언어
 
@@ -22,7 +29,7 @@
 
 --------------------------------------------------------------------------------------------------------------------
 
--- CREATE
+-- CREATE(창조, 생성)
 
 -- 테이블이나 인덱스, 뷰 등 다양한 데이터베이스 객체를 생성하는 구문
 -- 테이블로 생성된 객체는 DROP 구문을 통해 제거 할 수 있음 
@@ -30,7 +37,7 @@
 -- 1. 테이블 생성하기
 -- 테이블이란?
 -- 행(row)과 열(column)으로 구성되는 가장 기본적인 데이터베이스 객체
--- 데이터 배이스 내에서 모든 데이터는 테이블을 통해서 저장된다.
+-- 데이터베이스 내에서 모든 데이터는 테이블을 통해서 저장된다.
 
 
 -- [표현식] 
@@ -52,14 +59,29 @@
     DATE : 날짜 타입
     BLOB : 대용량 이진 데이터 (4GB)
     CLOB : 대용량 문자 데이터 (4GB)
+    
+    1BYTE * 1024 = 1KB
+    1KB * 1024 = 1MB
+    1MB * 1024 = 16B * 4 = 4GB
+    
 */
 
 -- MEMBER 테이블 생성
+CREATE TABLE "MEMBER"(
+MEMBER_ID VARCHAR2(20),
+MEMBER_PWD VARCHAR2(20),
+MEMBER_NAME VARCHAR2(30),
+MEMBER_SSN CHAR2(14),
+ENROLL_DATE DATE DEFAULT SYSDATE
+);
+
+-- SQL 작성법 : 대문자 작성 권장, 연결된 단어 사이에는 "_" (언더바) 사용
+-- 문자인코딩 UTF-8 : 영어,숫자 1BYTE, 한글, 특수문자 등은 3BYTE 취급
 
 
 
 -- 만든 테이블 확인
-
+SELECT * FROM "MEMBER";
 
 -- 2. 컬럼에 주석 달기
 -- [표현식]
@@ -607,6 +629,7 @@ WHERE C1.TABLE_NAME = 'EMPLOYEE_COPY';
 -- NOT NULL 제약 조건만 복사된 EMPLOYEE_COPY 테이블에
 -- EMP_ID 컬럼에 PRIMARY KEY 제약조건 추가
 ALTER TABLE EMPLOYEE_COPY ADD CONSTRAINT PK_EMP_COPY PRIMARY KEY(EMP_ID);
+
 
 -- * 수업시간에 활용하던 테이블에는 FK 제약조건 없는상태이므로 추가!!
 
