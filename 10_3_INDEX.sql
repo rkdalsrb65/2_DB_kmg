@@ -27,3 +27,39 @@
    -- 인덱스가 자동으로 생성되는 경우
    --> PK 또는 UNIQUE 제약조건이 설정되는 경우
 */
+
+-- ** 인덱스를 이용한 검색 방법 **
+--> WHERE절에 인덱스가 지정된 컬럼을 언급하면 된다.
+SELECT * FROM EMPLOYEE
+WHERE EMP_ID = 215; -- 인덱스 사용 O
+
+SELECT * FROM EMPLOYEE
+WHERE EMP_NAME = '대북혼'; -- 인덱스 사용 X
+
+-- 인덱스 확인용 테이블 생성
+CREATE TABLE TB_IDX_TEST(
+   TEST_NO NUMBER PRIMARY KEY, -- 자동으로 인덱스가 생성됨.
+   TEST_ID VARCHAR2(20) NOT NULL
+);
+
+-- TB_IDX_TEST 테이블에 샘플데이터 100만개 삽입 (PL/SQL 사용)
+BEGIN
+   FOR I IN 1..1000000
+   LOOP
+       INSERT INTO TB_IDX_TEST VALUES( I , 'TEST' || I );
+   END LOOP;
+   
+   COMMIT;
+END;
+/
+
+-- 샘플데이터 100만개 확인
+SELECT COUNT(*) FROM TB_IDX_TEST;
+
+-- 'TEST500000' 찾기
+SELECT * FROM TB_IDX_TEST
+WHERE TEST_ID = 'TEST500000'; -- INDEX 사용 X
+--> 15ms
+
+SELECT * FROM TB_IDX_TEST
+WHERE TEST_NO = 500000; -- INDEX 사용 O
