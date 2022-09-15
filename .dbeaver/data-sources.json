@@ -97,8 +97,7 @@
 				"auth-model": "oracle_native",
 				"auth-properties": {
 					"oracle.logon-as": "sysdba"
-				},
-				"handlers": {}
+				}
 			}
 		},
 		"oracle_thin-1833f1e593f-676c53a7ab154b86": {
@@ -132,8 +131,7 @@
 				"auth-model": "oracle_native",
 				"auth-properties": {
 					"oracle.logon-as": "sysdba"
-				},
-				"handlers": {}
+				}
 			}
 		},
 		"oracle_thin-1833f1eea73-7d9bb67313429d94": {
@@ -167,8 +165,7 @@
 				"auth-model": "oracle_native",
 				"auth-properties": {
 					"oracle.logon-as": "sysdba"
-				},
-				"handlers": {}
+				}
 			}
 		},
 		"oracle_thin-1833f1f7994-194dde1bafa92671": {
@@ -202,7 +199,38 @@
 				"auth-model": "oracle_native",
 				"auth-properties": {
 					"oracle.logon-as": "sysdba"
+				}
+			}
+		},
+		"oracle_thin-1833fe32ad3-1399b94881d0af20": {
+			"provider": "oracle",
+			"driver": "oracle_thin",
+			"name": "kmg_sample 계정",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "1521",
+				"database": "XE",
+				"url": "jdbc:oracle:thin:@//localhost:1521/XE",
+				"configurationType": "MANUAL",
+				"home": "C:\\app\\user1\\product\\21c\\dbhomeXE",
+				"type": "dev",
+				"provider-properties": {
+					"show-only-one-schema@": "false",
+					"@dbeaver-check-schema-content@": "false",
+					"@dbeaver-always-show-dba@": "false",
+					"@dbeaver-always-use-dba-views@": "false",
+					"@dbeaver-meta-use-sys-schema@": "false",
+					"@dbeaver-meta-use-simple-constraints@": "false",
+					"@dbeaver-use-rule-hint@": "false",
+					"@dbeaver-use-meta-optimizer@": "true",
+					"@dbeaver-meta-use-alternative-table-query@": "false",
+					"oracle.meta-search-in-synonyms": "false",
+					"@dbeaver-connection-type@": "BASIC",
+					"@dbeaver-sid-service@": "SERVICE"
 				},
+				"auth-model": "oracle_native",
 				"handlers": {}
 			}
 		}
