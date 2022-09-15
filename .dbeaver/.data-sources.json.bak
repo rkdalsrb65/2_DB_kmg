@@ -32,7 +32,7 @@
 				"auth-model": "oracle_native"
 			},
 			"custom-properties": {
-				"resultset.maxrows": "1"
+				"resultset.maxrows": "1000"
 			}
 		},
 		"oracle_thin-1830b5da6f4-6fe8620179eaa375": {
@@ -65,6 +65,41 @@
 				},
 				"auth-model": "oracle_native"
 			}
+		},
+		"oracle_thin-1833f1d813f-3e778a02352757db": {
+			"provider": "oracle",
+			"driver": "oracle_thin",
+			"name": "localhost",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "1521",
+				"database": "XE",
+				"url": "jdbc:oracle:thin:@//localhost:1521/XE",
+				"configurationType": "MANUAL",
+				"home": "C:\\app\\user1\\product\\21c\\dbhomeXE",
+				"type": "dev",
+				"provider-properties": {
+					"show-only-one-schema@": "false",
+					"@dbeaver-check-schema-content@": "false",
+					"@dbeaver-always-show-dba@": "false",
+					"@dbeaver-always-use-dba-views@": "false",
+					"@dbeaver-meta-use-sys-schema@": "false",
+					"@dbeaver-meta-use-simple-constraints@": "false",
+					"@dbeaver-use-rule-hint@": "false",
+					"@dbeaver-use-meta-optimizer@": "true",
+					"@dbeaver-meta-use-alternative-table-query@": "false",
+					"oracle.meta-search-in-synonyms": "false",
+					"@dbeaver-connection-type@": "BASIC",
+					"@dbeaver-sid-service@": "SERVICE"
+				},
+				"auth-model": "oracle_native",
+				"auth-properties": {
+					"oracle.logon-as": "sysdba"
+				},
+				"handlers": {}
+			}
 		}
 	},
 	"connection-types": {
@@ -72,7 +107,7 @@
 			"name": "Development",
 			"color": "255,255,255",
 			"description": "Regular development database",
-			"auto-commit": false,
+			"auto-commit": true,
 			"confirm-execute": false,
 			"confirm-data-change": false,
 			"auto-close-transactions": false

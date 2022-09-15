@@ -1,0 +1,3 @@
+	--> 1) SYS 관리자 계정 접속
+ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
+GRANT CREATE VIEW TO kh_kmg;
