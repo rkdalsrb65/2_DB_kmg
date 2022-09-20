@@ -220,7 +220,7 @@ DDL(Data Definition Language)
 데이터 정의 언어로 객체(OBJECT)를 만들고(CREATE), 수정하고(ALTER), 삭제(DROP)하는 구문을 말함
 
 CREATE : 테이블이나 인덱스, 뷰 등 데이터베이스 객체를 생성하는 구문
-ALTER : 테이블에 정의된 내용을 수정할 때 사용하는 데이터 정의어로
+ALTER : 테이블에 정의된 내용을 수정할 때 사용하는 데이터 정의어
 DROP : 테이블에 데이터를 삭제하는 구문
 
 컬럼 주석 : 테이블의 컬럼에 주석을 다는 구문 [COMMENT ON COLUMN 테이블명.컬럼명 IS ‘주석 내용';]
