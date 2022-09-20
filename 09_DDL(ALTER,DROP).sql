@@ -1,4 +1,4 @@
--- DEL(Data Definition Language)
+-- DDL(Data Definition Language)
 -- 객체를 만들고(CREATE), 바꾸고(ALTER), 삭제(DROP)하는 데이터 정의 언어
 
 /* ALTER(바꾸다, 수정하다, 변조하다)
