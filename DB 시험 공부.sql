@@ -78,8 +78,8 @@ ROLE(RESORUCE): DB 사용을 위한 기본 객체 생성 권한을 묶어둔 ROL
 
 > SELECT문
 
-5: SELECT절
-1: FROM절 + JOIN
+5: SELECT절 : 조회
+1: FROM절 + JOIN : 참조할 테이블명
 2: WHERE절 : 각 컬럼 값에 대한 조건을 나타낼 때 사용
 3: GROUP BY절 : 같은 값들이 여러개 기록된 컬럼을 가지고 같은 값들을 하나의 그룹으로 묶음
 4: HAVING절 : 그룹함수로 구해 올 그룹에 대한 조건을 설정할 때 사용
@@ -122,7 +122,7 @@ WHERE 조건문;
 DELETE FROM 테이블명
 WHERE 조건문;
 
-- CREATE TABLE 작성법
+- CREATE TABLE 작성법 : CREATE TABLE 테이블명 (컬럼명 데이터타입);
 
 > 데이터 타입 -> NUMBER : 숫자, CHAR : 고정길이문자 (최대 2000BYTE), VARCHAR2 : 가변길이문자 (최대 4000BYTE), DATE : 날짜
 
@@ -134,7 +134,7 @@ WHERE 조건문;
 (FK 제약조건은 레벨에 따라 작성법에 차이가 있음)
 
 - VIEW, SEQUENCE 생성을 위한 기본 작성법 (옵션 X)
-VIEW 생성 기본 작성법 : CREATE [OR REPLACE] VIEW 뷰이름 AS subquery
+VIEW 생성 기본 작성법 : CREATE [OR REPLACE] VIEW 뷰이름 AS subquery;
 SEQUENCE 생성 기본 작성법 : CREATE SEQUENCE 시퀀스이름;
 
 
