@@ -79,7 +79,6 @@ ROLE(RESORUCE): DB 사용을 위한 기본 객체 생성 권한을 묶어둔 ROL
 > SELECT문
 
 5: SELECT절
-
 1: FROM절 + JOIN
 2: WHERE절 : 각 컬럼 값에 대한 조건을 나타낼 때 사용
 3: GROUP BY절 : 같은 값들이 여러개 기록된 컬럼을 가지고 같은 값들을 하나의 그룹으로 묶음
@@ -125,20 +124,13 @@ WHERE 조건문;
 
 - CREATE TABLE 작성법
 
-> 데이터 타입 :
+> 데이터 타입 -> NUMBER : 숫자, CHAR : 고정길이문자 (최대 2000BYTE), VARCHAR2 : 가변길이문자 (최대 4000BYTE), DATE : 날짜
 
-NUMBER, CHAR(1~2000), VARCHAR2(1~4000), DATE
-
-> 기본값 :
-
-DEFAULT
+> 기본값 -> DEFAULT : DEFAULT 값으로 삽입
 
 > 제약조건 작성법
-
 -> 컬럼 레벨만 작성 가능 : NOT NULL
-
 -> 컬럼, 테이블 레벨 모두 작성 가능 : PK, FK, UNIQUE, CHECK
-
 (FK 제약조건은 레벨에 따라 작성법에 차이가 있음)
 
 - VIEW, SEQUENCE 생성을 위한 기본 작성법 (옵션 X)
