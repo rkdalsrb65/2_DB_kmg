@@ -75,6 +75,10 @@ ROLE(CONNECT) : DB 접속 관련 권한을 묶어둔 ROLE
 ROLE(RESORUCE): DB 사용을 위한 기본 객체 생성 권한을 묶어둔 ROLE
 
 - SELECT, INSERT, UPDATE, DELETE 작성법
+SELECT 컬럼명 FROM 테이블명;
+INSERT INTO 테이블명 VALUES(데이터);
+UPDATE 테이블명 SET 컬럼명 = 바꿀값 [WHERE 컬럼명 비교연산자 비교값];
+DELETE FROM 테이블명 WHERE 조건설정;
 
 > SELECT문
 
