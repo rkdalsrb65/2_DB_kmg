@@ -134,7 +134,7 @@
 		"oracle_thin-183532e7116-21d80e6190f65aee": {
 			"provider": "oracle",
 			"driver": "oracle_thin",
-			"name": "localhost",
+			"name": "member_kmg 계정",
 			"save-password": true,
 			"read-only": false,
 			"configuration": {
