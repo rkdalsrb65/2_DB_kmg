@@ -187,8 +187,20 @@
 					"@dbeaver-connection-type@": "BASIC",
 					"@dbeaver-sid-service@": "SERVICE"
 				},
-				"auth-model": "oracle_native",
-				"handlers": {}
+				"auth-model": "oracle_native"
+			}
+		}
+	},
+	"virtual-models": {
+		"oracle_thin-183e460abfd-1c0e99b6d6b96c28": {
+			"PROJECT": {
+				":BOARD": {
+					"properties": {
+						"erd.diagram.state": {
+							"serialized": "<diagram version=\"1\" name=\"empty\" time=\"202210172052\"><entities><data-source id=\"oracle_thin-183e460abfd-1c0e99b6d6b96c28\"><entity id=\"1\" name=\"BOARD\" fq-name=\"PROJECT.BOARD\" order=\"0\" color-bg=\"89,44,22\" x=\"295\" y=\"275\"><path name=\"PROJECT\"/></entity><entity id=\"2\" name=\"BOARD_TYPE\" fq-name=\"PROJECT.BOARD_TYPE\" order=\"1\" x=\"553\" y=\"322\"><path name=\"PROJECT\"/></entity><entity id=\"3\" name=\"MEMBER\" fq-name=\"PROJECT.&quot;MEMBER&quot;\" order=\"2\" x=\"38\" y=\"31\"><path name=\"PROJECT\"/></entity><entity id=\"4\" name=\"BOARD_IMG\" fq-name=\"PROJECT.BOARD_IMG\" order=\"3\" x=\"550\" y=\"469\"><path name=\"PROJECT\"/></entity><entity id=\"5\" name=\"BOARD_LIKE\" fq-name=\"PROJECT.BOARD_LIKE\" order=\"4\" x=\"305\" y=\"83\"><path name=\"PROJECT\"/></entity><entity id=\"6\" name=\"COMMENT\" fq-name=\"PROJECT.&quot;COMMENT&quot;\" order=\"5\" x=\"33\" y=\"315\"><path name=\"PROJECT\"/></entity></data-source></entities><relations><relation name=\"FK_BOARD_TO_BOARD_IMG_1\" fq-name=\"PROJECT.BOARD_IMG.FK_BOARD_TO_BOARD_IMG_1\" type=\"fk\" pk-ref=\"1\" fk-ref=\"4\"/><relation name=\"FK_BOARD_TO_BOARD_LIKE_1\" fq-name=\"PROJECT.BOARD_LIKE.FK_BOARD_TO_BOARD_LIKE_1\" type=\"fk\" pk-ref=\"1\" fk-ref=\"5\"/><relation name=\"FK_BOARD_TO_COMMENT_1\" fq-name=\"PROJECT.&quot;COMMENT&quot;.FK_BOARD_TO_COMMENT_1\" type=\"fk\" pk-ref=\"1\" fk-ref=\"6\"/><relation name=\"FK_BOARD_TYPE_TO_BOARD_1\" fq-name=\"PROJECT.BOARD.FK_BOARD_TYPE_TO_BOARD_1\" type=\"fk\" pk-ref=\"2\" fk-ref=\"1\"/><relation name=\"FK_MEMBER_TO_BOARD_1\" fq-name=\"PROJECT.BOARD.FK_MEMBER_TO_BOARD_1\" type=\"fk\" pk-ref=\"3\" fk-ref=\"1\"/><relation name=\"FK_MEMBER_TO_BOARD_LIKE_1\" fq-name=\"PROJECT.BOARD_LIKE.FK_MEMBER_TO_BOARD_LIKE_1\" type=\"fk\" pk-ref=\"3\" fk-ref=\"5\"/><relation name=\"FK_MEMBER_TO_COMMENT_1\" fq-name=\"PROJECT.&quot;COMMENT&quot;.FK_MEMBER_TO_COMMENT_1\" type=\"fk\" pk-ref=\"3\" fk-ref=\"6\"/><relation name=\"FK_COMMENT_TO_COMMENT_1\" fq-name=\"PROJECT.&quot;COMMENT&quot;.FK_COMMENT_TO_COMMENT_1\" type=\"fk\" pk-ref=\"6\" fk-ref=\"6\"><bend type=\"rel\" x=\"223\" y=\"483\"/><bend type=\"rel\" x=\"109\" y=\"525\"/></relation></relations></diagram>"
+						}
+					}
+				}
 			}
 		}
 	},
@@ -197,7 +209,7 @@
 			"name": "Development",
 			"color": "255,255,255",
 			"description": "Regular development database",
-			"auto-commit": true,
+			"auto-commit": false,
 			"confirm-execute": false,
 			"confirm-data-change": false,
 			"auto-close-transactions": false
